@@ -1,0 +1,176 @@
+
+/* FONTS */
+
+@import url(https://db.onlinewebfonts.com/c/5f1e59a10e502a6a55c39cd7b9868dba?family=Serpentine);
+@import url(//db.onlinewebfonts.com/c/1daa609fdca8da38e5bcbb12c2a987db?family=DINNextW01-Regular);
+@import url(//db.onlinewebfonts.com/c/9ae5e19516bc6428f1327ff3311b2617?family=DINNextW01-Light);
+@import url(//db.onlinewebfonts.com/c/78c77b16334d415ac17d5a812345a0a1?family=DINNextW01-Bold);
+
+@font-face {
+  font-family:"DINNextW01-Regular";
+  src: url("DIN_Next_W01_Regular.ttf") format("truetype");
+}
+
+@font-face {
+  font-family:"Serpentine";
+  src: url("SerpentineMediumOblique.ttf") format("truetype");
+}
+
+
+
+/* BODY */
+body {
+    font-family: "DINNextW01-Regular";
+    font-size: 15px;
+    line-height: 1;
+    color: #414141;
+    background-color: #ffffff;
+}
+
+h1, h2, h3, h4, h5, .h1, .h2, .h3, .h4, .h5 {
+    font-family: "DINNextW01-Regular", sans-serif;
+    color: #ed1b2e;
+}
+
+h6, .h6 {
+    font-family: "DINNextW01-Regular", sans-serif;
+    color: #fff;
+}
+
+
+
+/* NAVBAR */
+.navbar-inverse {
+    background-color: #121212;
+    border-color: #414141;
+}
+
+.navbar-inverse .navbar-brand {
+    color: #ffffff;
+    font-family: "Serpentine";
+    font-style: oblique;
+}
+
+.navbar-logo {
+    width: 40px;
+}
+
+
+/* DROPDOWN */
+.sw-show.sw-dropdown-content {
+    display: block;
+    background-color: #121212; 
+}
+
+.sw-dropdown-in {
+    position: relative;
+    padding: 8px 10px;
+    margin: 8px 10px;
+    /* width: auto; */
+    background-color: #121212;
+    z-index: 100;
+}
+
+
+/* FEATURES BUTTON */
+.bttn-pill.bttn-primary {
+    background: #ed1b2e;
+    color: #fff;
+}
+
+
+/* APPLY BUTTON */
+.bttn-material-flat.bttn-primary {
+    background: #ed1b2e;
+    color: #fff;
+    border-color: #ed1b2e;
+}
+
+.bttn-material-flat.bttn-primary:hover {
+    background: #fff;
+    color: #ed1b2e;
+    border-color: #ed1b2e;
+}
+
+.bttn-material-flat.bttn-primary:focus {
+    background: #fff;
+    color: #ed1b2e;
+    border-color: #fff;
+}
+
+
+
+/* FEATURE DROPDOWN MENUS */
+.btn-default {
+    color: #fff;
+    background-color: #121212;
+    border-color: #ed1b2e;
+    font-size: 4;
+    transition-duration: 0.3s;
+}
+
+.btn-default:hover {
+    color: #fff;
+    background-color: #ed1b2e;
+    border-color: #ed1b2e;
+    font-size: 4;
+}
+
+.btn-default:active,.btn-default.active,.open>.dropdown-toggle.btn-default {
+    color: #fff;
+    background-color: #ed1b2e;
+    border-color: #ed1b2e
+}
+
+.btn-default:active:hover,.btn-default.active:hover,.open>.dropdown-toggle.btn-default:hover,.btn-default:active:focus,.btn-default.active:focus,.open>.dropdown-toggle.btn-default:focus,.btn-default:active.focus,.btn-default.active.focus,.open>.dropdown-toggle.btn-default.focus {
+    color: #fff;
+    background-color: #ed1b2e;
+    border-color: #ed1b2e
+}
+
+.selected {background-color: #ed1b2e !important;}
+
+.open>.dropdown-menu {
+    display: block;
+    background-color: #414141;
+}
+
+.dropdown-menu>li>a {
+    display: block;
+    padding: 3px 20px;
+    clear: both;
+    font-weight: normal;
+    line-height: 1.42857143;
+    color: #fff;
+    white-space: nowrap;
+}
+
+
+.dropdown-menu > li > a:hover, .dropdown-menu > li > a:focus {
+            background-color:#ed1b2e;
+}
+
+
+/* CHART TITLE */
+
+.chart-title {
+    font-weight: bold;
+    font-family: "DINNextW01-Regular", sans-serif;
+}
+
+.chart-title {
+    border-bottom: 1px solid #121212;
+    color: #fff;
+    font-size: 16px;
+    background-color: #121212;
+}
+
+.chart-wrapper, .nav-tabs-custom, .sbframe-commentary {
+    background: #fff;
+    border: 1px solid #121212;
+    border-radius: 3px;
+    margin-bottom: 8px;
+    margin-right: 8px;
+}
+
+

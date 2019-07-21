@@ -1,0 +1,276 @@
+---
+title: "SPECIALIZED"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    css: styles-default.css
+    logo: logo.png
+runtime: shiny
+---
+
+```{r setup, include=FALSE}
+# Libraries 
+
+## App
+library(flexdashboard)
+library(shiny)
+library(shinyWidgets)
+# library(shinyjs)
+
+## Core
+library(tidyverse)
+library(tidyquant)
+
+## Viz
+library(plotly)
+library(ggthemes)
+library(extrafont)
+
+
+## Modeling
+library(xgboost)
+library(parsnip)
+
+# Data
+bikes_tbl <- read_csv("specialized_bikes_2019.csv")
+
+# Scripts
+source("preprocess_data.R")
+source("make_predictions.R")
+
+# Model
+model_xgboost <- read_rds("model_xgboost.rds")
+
+# Preprocess Data
+bikes_tbl <- preprocess_data(bikes_tbl)
+```
+
+
+Column {data-width=250}
+-----------------------------------------------------------------------
+
+### Feature Selection
+
+```{r}
+# Enable Shiny JS with flexdashboard (Reset = Reset + Apply)
+h6("")
+# Dropdown Icon & Menu
+dropdown(
+    style = "pill", 
+    size = "md",
+    tooltip = tooltipOptions(title = "Select One of Each"),
+    icon = icon("bicycle"),
+    status = "primary",
+    width = "100%",
+    animate = animateOptions(
+      enter = animations$fading_entrances$fadeInLeftBig,
+      exit = animations$fading_exits$fadeOutLeftBig),
+    
+       # Picker Input Widget: Experience
+    shinyWidgets::pickerInput(
+      inputId  = "picker_experience",
+      label    = h5(strong("Experience")),
+      choices  = sort(unique(bikes_tbl$experience)),
+      selected = "Fitness|Turbo Levo|Urban",
+      multiple = FALSE,
+      options = list(style = "btn-default btn-md")
+    ),
+    
+    hr(),
+    
+     # Picker Input Widget: Brand
+    shinyWidgets::pickerInput(
+      inputId  = "picker_brand",
+      label    = h5(strong("Brand")),
+      choices  = sort(unique(bikes_tbl$brand)),
+      selected = "E-Bike|Fitness",
+      multiple = FALSE,
+      options = list(`style` = "btn-default btn-md")
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, brand) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(brand) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # Picker Input Widget: Product Family
+    shinyWidgets::pickerInput(
+      inputId  = "picker_product",
+      label    = h5(strong("Product")),
+      choices  = sort(unique(bikes_tbl$productFamily)),
+      selected = "Turbo Vado",
+      multiple = FALSE,
+      options = list(style = "btn-default btn-md")
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, productFamily) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(productFamily) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # Picker Input Widget: Drive Train
+    shinyWidgets::pickerInput(
+      inputId  = "picker_drivetrain",
+      label    = h5(strong("DriveTrain")),
+      choices  = sort(unique(bikes_tbl$driveTrain)),
+      selected = "1x",
+      multiple = FALSE,
+      options = list(style = "btn-default btn-md")
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, driveTrain) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(driveTrain) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # Picker Input Widget: Material
+    shinyWidgets::radioGroupButtons(
+      inputId  = "picker_material",
+      label    = h5(strong("Material")),
+      justified = TRUE,
+      selected = "Carbon",
+      size = "sm",
+      choiceValues  = sort(unique(bikes_tbl$material)),
+      choiceNames = c("Aluminum","Alum|Carb","Carbon","Steel")
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, material) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(material) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # Picker Input Widget: Gender
+    shinyWidgets::radioGroupButtons(
+      inputId  = "picker_gender",
+      label    = h5(strong("Gender")),
+      size     = 'sm',
+      justified = TRUE,
+      choices  = sort(unique(bikes_tbl$gender)),
+      selected = "Women"
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, gender) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(gender) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # Picker Input Widget: Suspension
+    shinyWidgets::radioGroupButtons(
+      inputId  = "picker_suspension",
+      label    = h5(strong("Suspension")),
+      justified = TRUE,
+      size = "sm",
+      choices  = sort(unique(bikes_tbl$suspension))
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, suspension) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(suspension) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # Picker Input Widget: Brake Type
+    shinyWidgets::radioGroupButtons(
+      inputId  = "picker_braketype",
+      label    = h5(strong("Brake")),
+      justified = TRUE,
+      size = "sm",
+      choices  = sort(unique(bikes_tbl$brakeType))
+    ),
+    
+    h6(renderText(c("Current: ", bikes_tbl %>%
+        distinct(experience, brakeType) %>%
+        filter(experience == input$picker_experience) %>%
+        pull(brakeType) %>% sort() %>% paste0(collapse=", ")))),
+    
+    hr(),
+    
+    # # Picker Input Widget: Gender
+    # shinyWidgets::pickerInput(
+    #   inputId  = "picker_gender",
+    #   label    = h5("Gender"),
+    #   choices  = sort(unique(bikes_tbl$gender)),
+    #   selected = unique(bikes_tbl$gender),
+    #   multiple = FALSE
+    # ),
+    
+
+    br(),
+    # hr(),
+    # br(),
+    
+    # Apply Button 
+    actionBttn(inputId = "apply",  
+               label   = "Apply",  
+               icon    = icon("play"), 
+               style  = "material-flat",
+               color = "primary",
+               block = TRUE)
+    
+    # # Reset button
+    # actionBttn(inputId = "reset",
+    #            label = "Reset",
+    #            icon = icon("sync"),
+    #            style  = "unite",
+    #            color = "primary",
+    #            block = FALSE)
+    
+    )
+
+h6("")
+
+# Render Table
+renderTable(hover = TRUE, spacing = "s",{
+    new_bike_tbl() %>% format_table()
+})
+
+# renderText("some text here")
+```
+
+Column {data-width=650}
+-----------------------------------------------------------------------
+
+### Price Prediction vs Product Portfolio
+
+```{r}
+# Reactive Prediction
+new_bike_tbl <- eventReactive(eventExpr = input$apply, valueExpr = {
+    
+    generate_new_bike(
+        brand = input$picker_brand,
+        productFamily = input$picker_product,
+        experience = input$picker_experience,
+        material = input$picker_material,
+        suspension = input$picker_suspension,
+        brakeType = input$picker_braketype,
+        driveTrain = input$picker_drivetrain,
+        gender = input$picker_gender,
+        .ml_model = model_xgboost)
+    
+}, ignoreNULL = FALSE)
+```
+
+```{r}
+# Display Plot
+output$plotly_1 <- renderPlotly({
+    bind_bike_predictions(bikes_tbl = bikes_tbl, new_bike_tbl = new_bike_tbl()) %>%
+        plot_bike_predictions()
+})
+
+plotlyOutput("plotly_1")
+```
+
+
+
